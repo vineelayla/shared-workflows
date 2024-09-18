@@ -1,0 +1,42 @@
+name: Destination repo (Calling repo B child Repo)
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        type: string
+        required: true
+      runner: 
+        type: string
+        required: true
+      file_name:
+        type: string
+        required: true
+      
+        
+env: 
+  image_name: ${{ inputs.image_name }}
+  
+jobs:
+  checkout:
+    name: repo checkout
+    runs-on: ${{ inputs.runner }}
+    steps:
+     - name: checkout repo
+       uses: actions/checkout@v4
+  result:
+    name: result of the workflow
+    runs-on: ${{ inputs.runner }}
+    steps:
+     - name: result
+       run: |
+         echo "repo has been cloned successfully"
+  upload:
+    name: upload artifact
+    runs-on: ${{ inputs.runner }}
+    steps:
+    - name: artifact upload
+      uses: actions/upload-artifact@v4
+      with:
+         path: "./${{ inputs.file_name }}"    
+         name: "my-repo"
+    
